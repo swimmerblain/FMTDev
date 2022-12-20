@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/qbsofthand_industry_api/qbsofthand_industry_api.h
+memory
+-
+string
+-
+
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/src/main.cpp
+qbsofthand_industry_api/qbsofthand_industry_api.h
+-
+iomanip
+-
+iostream
+-
+thread
+-
+fstream
+-
+string
+-
+

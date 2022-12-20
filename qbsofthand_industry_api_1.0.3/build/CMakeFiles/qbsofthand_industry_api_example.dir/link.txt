@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic -m32 CMakeFiles/qbsofthand_industry_api_example.dir/src/main.cpp.o  -o qbsofthand_industry_api_example   -L/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/libs  -Wl,-rpath,/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/libs: -lqbsofthand_industry_api_x86 

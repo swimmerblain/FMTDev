@@ -1,0 +1,7 @@
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/install/strip.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/install/local.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/install.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/list_install_components.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/rebuild_cache.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/edit_cache.dir
+/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/build/CMakeFiles/qbsofthand_industry_api_example.dir
