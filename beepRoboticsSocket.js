@@ -126,10 +126,10 @@ wss.on('connection', (ws, req) => {
                     sendToAll(wss.clients, ws, JSON.stringify(outgoing))
                 }
                 break;
-			case "pushButton":
+			case "armPushButton":
                 //console.log(incoming.data)
                 outgoing = {
-                    msg: "pushButton",
+                    msg: "armPushButton",
                     data: incoming.data
                 }
                 if (live){

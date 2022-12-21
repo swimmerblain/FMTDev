@@ -66,7 +66,7 @@ async def consumer():
                     with open('hand.txt', 'w') as f:
                         f.write(msgData['data'])
                     print(msgData['data'])
-                if msgData['msg'] == "pushButton":
+                if msgData['msg'] == "armPushButton":
                     pb1 = recv.getActualQ()
                     pb2 = recv.getActualQ()
                     pb3 = recv.getActualQ()

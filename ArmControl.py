@@ -63,6 +63,8 @@ async def producer():
                         msg = {'msg': 'ArmPosition', 'data': pos9}
                     case "10":
                         msg = {'msg': 'ArmPosition', 'data': pos10}
+                    case "11":
+                        msg = {'msg': 'armPushButton', 'data': 'armPushButton'}
                     
                 if last_msg != msg:
                     print(msg)
