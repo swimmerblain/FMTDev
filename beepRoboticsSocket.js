@@ -126,6 +126,16 @@ wss.on('connection', (ws, req) => {
                     sendToAll(wss.clients, ws, JSON.stringify(outgoing))
                 }
                 break;
+			case "pushButton":
+                //console.log(incoming.data)
+                outgoing = {
+                    msg: "pushButton",
+                    data: incoming.data
+                }
+                if (live){
+                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                }
+                break;
             default:
                 sendToAll(wss.clients, ws, message);
         }

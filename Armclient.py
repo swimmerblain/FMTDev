@@ -13,6 +13,10 @@ logger = logging.getLogger(__name__)
 
 server = 'ws://localhost:4007'
 msg1 = {'msg': 'setLiveSession', 'data': {'live': 'true'}}
+HOMEPOSITION = [0.0, -90, 0.0, -180.0, -90.0, 0.0]
+pos9 = [0.00, -50.41, 62.83, -220.58, -90, 0.00] #21 inches from base
+pos11 = [-30.37, -7.6, 13.4, -66.6, -67.41, 70.18] #26 inches from base
+
 
 async def toDeg(values):
     for i in range(len(values)):
@@ -62,6 +66,39 @@ async def consumer():
                     with open('hand.txt', 'w') as f:
                         f.write(msgData['data'])
                     print(msgData['data'])
+                if msgData['msg'] == "pushButton":
+                    pb1 = recv.getActualQ()
+                    pb2 = recv.getActualQ()
+                    pb3 = recv.getActualQ()
+                    pb1[0] = HOMEPOSITION[0]
+                    pb1[1] = HOMEPOSITION[1]
+                    pb1[2] = HOMEPOSITION[2]
+                    pb1[3] = HOMEPOSITION[3]
+                    pb1[4] = HOMEPOSITION[4]
+                    pb1[5] = HOMEPOSITION[5]
+                    pb2[0] = pos9[0]
+                    pb2[1] = pos9[1]
+                    pb2[2] = pos9[2]
+                    pb2[3] = pos9[3]
+                    pb2[4] = pos9[4]
+                    pb2[5] = pos9[5]
+                    pb3[0] = pos11[0]
+                    pb3[1] = pos11[1]
+                    pb3[2] = pos11[2]
+                    pb3[3] = pos11[3]
+                    pb3[4] = pos11[4]
+                    pb3[5] = pos11[5]
+                    speed = [0,0, -0.1, 0, 0,0]
+                    
+                    cont.moveJ(pb1, 2, .5, False)
+                    cont.moveJ(pb2, 2, .5, False)
+                    #use if the hand needs to go out farther to push the button
+                    #cont.moveJ(pb3, 2, .5, False)
+                    cont.moveUntilContact(speed)
+                    
+                    #use if the hand needs to go out farther to push the button
+                    #cont.moveJ(pb3, 2, .5, False)
+                    cont.moveJ(pb2, 2, .5, False)
 
             except websockets.exceptions.ConnectionClosed:
                 print('connection closed')
