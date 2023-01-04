@@ -30,6 +30,7 @@ async def producer():
         global recv 
         recv = rtde_receive.RTDEReceiveInterface(HOST)
         await websocket.send(json.dumps(msg1))
+        handPosFBK = ""
         while True:
             try:
                 init_q = recv.getActualQ()
@@ -40,6 +41,9 @@ async def producer():
                 await websocket.send(json.dumps(msg))
                 #get hand position and send
                 #will get hand position from TXT file for now then send
+                with open('curhand.txt', 'r') as f:
+                    handPosFBK = f.readline()
+                msg = {'msg': 'currentHandPos', 'data' : handPosFBK}
                 await asyncio.sleep(2)
             except websockets.exceptions.ConnectionClosed:
                 print('connection closed')
