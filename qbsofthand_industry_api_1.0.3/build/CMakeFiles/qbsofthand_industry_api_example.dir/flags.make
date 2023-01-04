@@ -6,5 +6,5 @@ CXX_FLAGS =   -m32 -std=gnu++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/c/Work/python/ur_robot/hand/qbsofthand_industry_api_1.0.3/include 
+CXX_INCLUDES = -I"/mnt/c/Documents and Settings/jsteagall/OneDrive - Fairbanks Morse LLC/Documents/GitHub/FMTDev/qbsofthand_industry_api_1.0.3/include" 
 

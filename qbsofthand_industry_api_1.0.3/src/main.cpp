@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 		//cout << api_test.getStatistics() << endl;
 	
 	  	//cout << setprecision(3) << "Start position: " << api_test.getPosition() << "%" << endl;
-		ifstream Myfile("/mnt/c/Work/nodejs/hand.txt");
+		ifstream Myfile("hand.txt");
 		getline(Myfile, position);
 		Myfile.close();
 		int pos = stoi(position);
@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 		//Get current hand position and write to text file
 		//curPosition = to_string(curpos);
 		ofstream outfile;
-		outfile.open("/mnt/c/Work/nodejs/curhand.txt");
+		outfile.open("curhand.txt");
 		//Myfile << curPosition;
 		outfile << api_test.getPosition();
 		outfile.close();
