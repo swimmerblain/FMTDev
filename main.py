@@ -21,6 +21,8 @@ from datetime import datetime
 def Client():
     os.system("Armclient.py")
 
+def handpro():
+    os.system("/qbsofthand_industry_api_1.0.3/build/qbsofthand_industry_api_example")
 
 if __name__ == '__main__':
     #due to process randomly failing we will create processes for each function.  if the process is no longer alive we can start it again
@@ -35,11 +37,14 @@ if __name__ == '__main__':
     #SNA demo function call
     client = Process(target = Client)
 
+    hand = Process(target = handpro)
+
     #start the different processes
     #if the IP address is not currently reachable this will initially fail but the keep alive will start it again
     #prod.start()
     #con.start()
     client.start()
+    hand.start()
 
     #run is use if we want to stop the process's set run to false
     run = True
@@ -48,11 +53,13 @@ if __name__ == '__main__':
     prodFailCnt = 0
     conFailCnt = 0
     clientFailCnt = 0
+    handFailCnt = 0
 
     #last fail cnt is used for logging. if the fail count is different than last fail count write the time and date to log file and update last fail count
     lastProdFailCnt = 0
     lastConFailCnt = 0
     lastClientFailCnt = 0
+    lastHandFailCnt = 0 
 
     while run:
         """future
@@ -80,6 +87,13 @@ if __name__ == '__main__':
                 log.write(datetime.now())
                 log.write(" : ", clientFailCnt)
             lastClientFailCnt = clientFailCnt
+        #write date time and fail count to log if failed
+        if handFailCnt != lastHandFailCnt:
+            with ('log.txt', 'a') as log:
+                log.write("Hand fail count ")
+                log.write(datetime.now())
+                log.write(" : ", handFailCnt)
+            lastHandFailCnt = handFailCnt
         """future
         #check if alive if not increase fail count, terminate process, delete process and start again
         if prod.is_alive() == False:
@@ -108,6 +122,14 @@ if __name__ == '__main__':
             client = Process(target = Client)
             client.start()
             clientFailCnt += 1
+        #check if alive if not increase fail count, terminate process, delete process and start again
+        if hand.is_alive() == False:
+            print("hand program faulted")
+            hand.terminate()
+            del hand
+            hand = Process(target = handpro)
+            hand.start()
+            handFailCnt += 1
         
 
 
