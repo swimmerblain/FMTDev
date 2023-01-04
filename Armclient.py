@@ -4,6 +4,7 @@ import logging
 import json
 import rtde_receive
 import rtde_control
+import rtde_io
 import math
 
 
@@ -44,7 +45,7 @@ async def producer():
                 with open('curhand.txt', 'r') as f:
                     handPosFBK = f.readline()
                 msg = {'msg': 'currentHandPos', 'data' : handPosFBK}
-                await asyncio.sleep(2)
+                await asyncio.sleep(1)
             except websockets.exceptions.ConnectionClosed:
                 print('connection closed')
                 break
@@ -53,12 +54,36 @@ async def producer():
 async def consumer():
     async with websockets.connect(server) as websocket:
         cont =  rtde_control.RTDEControlInterface(HOST)
-        #recv2 = rtde_receive.RTDEReceiveInterface(HOST)
+        recv2 = rtde_receive.RTDEReceiveInterface(HOST)
+        io_ = rtde_io.RTDEIOInterface(HOST)
+        io_.setStandardDigitalOut(0, True)
         odd_even = 0
         while True:
             try:
                 message = await websocket.recv()
                 msgData = json.loads(message)
+                if recv2.isEmergencyStopped():
+                    io_.setStandardDigitalOut(1, True)
+                    io_.setStandardDigitalOut(2, False)
+                    io_.setStandardDigitalOut(3, False)
+                elif recv2.isProtectiveStopped():
+                    io_.setStandardDigitalOut(1, True)
+                    io_.setStandardDigitalOut(2, False)
+                    io_.setStandardDigitalOut(3, False)
+                elif (msgData['msg'] == 'lightColor'):
+                    if msgData['data'] == 'red':
+                        io_.setStandardDigitalOut(1, True)
+                        io_.setStandardDigitalOut(2, False)
+                        io_.setStandardDigitalOut(3, False)
+                    elif msgData['data'] == 'yellow':
+                        io_.setStandardDigitalOut(1, False)
+                        io_.setStandardDigitalOut(2, True)
+                        io_.setStandardDigitalOut(3, False)
+                    elif msgData['data'] == 'green':
+                        io_.setStandardDigitalOut(1, False)
+                        io_.setStandardDigitalOut(2, False)
+                        io_.setStandardDigitalOut(3, True)
+                    
                 if msgData['msg'] == "newArmPosition":
                     init_q = recv.getActualQ()
                     print("Recieved msg" + str(msgData))
@@ -71,6 +96,8 @@ async def consumer():
                         f.write(msgData['data'])
                     print(msgData['data'])
                 if msgData['msg'] == "armPushButton":
+                    with open('hand.txt', 'w') as f:
+                        f.write('0')
                     pb1 = recv.getActualQ()
                     pb2 = recv.getActualQ()
                     pb3 = recv.getActualQ()
@@ -106,6 +133,9 @@ async def consumer():
 
             except websockets.exceptions.ConnectionClosed:
                 print('connection closed')
+                io_.setStandardDigitalOut(1, True)
+                io_.setStandardDigitalOut(2, False)
+                io_.setStandardDigitalOut(3, False)
                 break
 
 

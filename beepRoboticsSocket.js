@@ -136,6 +136,17 @@ wss.on('connection', (ws, req) => {
                     sendToAll(wss.clients, ws, JSON.stringify(outgoing))
                 }
                 break;
+            case "lightColor":
+                
+                outgoing = {
+                    msg: "lightColor",
+                    data: incoming.data
+                }
+                if (live){
+                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                }
+                break;
+            
             default:
                 sendToAll(wss.clients, ws, message);
         }
