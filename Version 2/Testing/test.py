@@ -7,4 +7,6 @@ x = {
 
 print(x["name"])
 y = json.dumps(x)
+x['age'] = 10
+print(x)
 print(y)

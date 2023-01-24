@@ -14,6 +14,8 @@ connected = False
 
 server = 'ws://localhost:4007'
 
+unlock = "Unknown"
+quit = "unknown"
 
 #send all messages to the web socket
 '''
@@ -26,10 +28,8 @@ get serial number
 get robot model number
 
 following are status sent but not updated ever XX time
-Power On
-Power Off 
 Unlocking protective stop
-quit
+
 
 The following are commands that can be sent to the robot
 shutdown
@@ -46,21 +46,20 @@ robot must be powered on first
 
 #define the data part of the message to send
 data = {
+            "Connected": connected,
             "robotmode": "Unknown",
-            "Polyscope Version" "Unknown",
+            "Polyscope Version": "Unknown",
             "SafetyStatus": "Unknown",
             "In Remote": "Unknown",
             "Serial": "Unknown",
             "model": "Unknown",
-            "Power On": "Unknown",
-            "Power Off": "Unknown",
             "Unlocking Protective": "Unknown",
             "Quit": "Unknown"
             }
 msg = {'msg': 'dashboardData', 'data': data}
  
 
-def getfeedback(labelup):
+async def getfeedback():
     global sock
     global connected
     collected = b''
@@ -71,34 +70,107 @@ def getfeedback(labelup):
         elif part == b"\n":
             break
     #print(collected.decode("utf-8"))
-    labelup.set(collected.decode("utf-8"))
     if collected.decode("utf-8") == "Disconnected":
         connected = False
+    return collected.decode("utf-8")
     #    lconn_text.set("Disconnected")
 
+async def sockconnect():
+    global sock
+    global connected
+    connected = False
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout)
+    sock.connect((host,port))
+    print(sock.recv(1096))
+    connected = True
+    print(connected)
+    
 async def producer():
+    global sock
+    global connected
+    global data
+    global msg
+    global unlock
+    global quit
+    #connect to socket
+    #await sockconnect()
+    connected = False
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(timeout)
+    sock.connect((host,port))
+    print(sock.recv(1096))
+    connected = True
     async with websockets.connect(server) as websocket:
         while True:
             try:
                 # get all the data needed to send
-                
-                
+                data['Connected'] = connected
+                if connected:
+                    sock.sendall(('robotmode\n').encode())
+                    robotmode = await getfeedback()
+                    #Polyscope Version
+                    sock.sendall(('PolyscopeVersion\n').encode())
+                    Polyscope = await getfeedback()
+                    #safety Status
+                    sock.sendall(('safetystatus\n').encode())
+                    safetystat = await getfeedback()
+                    #In Remote
+                    sock.sendall(('is in remote control\n').encode())
+                    remote = await getfeedback()
+                    #Serial
+                    sock.sendall(('get serial number\n').encode())
+                    serial = await getfeedback()
+                    #model
+                    sock.sendall(('get robot model\n').encode())
+                    model = await getfeedback()
+
+
+                data['robotmode'] = robotmode
+                data['Polyscope Version'] = Polyscope
+                data['SafetyStatus'] = safetystat
+                data['In Remote'] = remote
+                data['Serial'] = serial
+                data['model'] = model
+                data['Unlocking Protective'] = unlock
+                data['Quit'] = quit
                 msg['data'] = data
                 await websocket.send(json.dumps(msg))
-                time.sleep(1)
+                await asyncio.sleep(1)
             except websockets.exeptions.ConnectionClosed:
                 print('Connection Closed')
                 break
                 
 async def consumer():
+    global unlock
+    global quit
     async with websockets.connect(server) as websocket:
         while True:
             try:
                 message = await websocket.recv()
-                msgDat = json.loads(message)
+                msgData = json.loads(message)
                 if msgData['msg'] == 'dashboardCMD':
+                    print("True")
+                    #Unlocking Protective
+                    sock.sendall(('unlock protective stop\n').encode())
+                    unlock = await getfeedback()
+                    #Quit
+                    sock.sendall(('quit\n').encode())
+                    quit = await getfeedback()
+
+
+            except websockets.exeptions.ConnectionClosed:
+                print('Connection Closed')
+                break
                 
-                
+async def handle():
+    consumer_task = asyncio.ensure_future(consumer())
+    producer_task = asyncio.ensure_future(producer())
+    done, pending = await asyncio.wait([consumer_task, producer_task], return_when = asyncio.FIRST_COMPLETED,)
+    for task in pending:
+        task.cancel()
+        
+asyncio.get_event_loop().run_until_complete(handle())
 
 
 '''
