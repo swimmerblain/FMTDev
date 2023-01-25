@@ -5,7 +5,7 @@ from datetime import datetime
 
 #function to get dashboard in formation from rover.  Robot should be in remote mode before using these
 def dashboardstr():
-    os.system("dashboard.py")
+    os.system("python3 dashboard.py")
    
 if __name__ == '__main__':
     #general run.  goes to false to stop the program
@@ -28,9 +28,10 @@ if __name__ == '__main__':
             dashboard = Process(target = dashboardstr)
             dashboard.start()
             dashFailCnt += 1
-            with ('log.txt', 'a') as log:
+            with open("log.txt", 'a') as log:
                 log.write("dashfail count ")
-                log.write(datetime.now())
-                log.write(" : ", dashFailCnt)
+                log.write(str(datetime.now()))
+                log.write(" : " + str(dashFailCnt))
+                log.write('\n')
             
     

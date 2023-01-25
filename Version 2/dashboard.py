@@ -149,14 +149,41 @@ async def consumer():
             try:
                 message = await websocket.recv()
                 msgData = json.loads(message)
+                print(msgData['data'])
                 if msgData['msg'] == 'dashboardCMD':
-                    print("True")
+                    
+                    if msgData['data'] == "shutdown":
+                        sock.sendall(('shudown\n').encode())
+                    elif str(msgData['data']) == "power off":
+                        sock.sendall(('power off\n').encode())
+                        await getfeedback()
+                    elif str(msgData['data']) == "power on":
+                        print("powered on")
+                        sock.sendall(('power on\n').encode())
+                        await getfeedback()
+                    elif msgData['data'] == "brake release":
+                        sock.sendall(('brake release\n').encode())
+                        await getfeedback()
+                    elif msgData['data'] == "unlock protective stop":
+                        sock.sendall(('unlock protective stop\n').encode())
+                        unlock = await getfeedback()
+                    elif msgData['data'] == "restart safety":
+                        sock.sendall(('restart safety\n').encode())
+                        await getfeedback()
+                    elif msgData['data'] == "quit":
+                        sock.sendall(('quit\n').encode())
+                        quit = await getfeedback()
+                    else:
+                        print("unknown command ", str(msgData['data']))
+                        
+
+                    #print("True")
                     #Unlocking Protective
-                    sock.sendall(('unlock protective stop\n').encode())
-                    unlock = await getfeedback()
+                    #sock.sendall(('unlock protective stop\n').encode())
+                    #unlock = await getfeedback()
                     #Quit
-                    sock.sendall(('quit\n').encode())
-                    quit = await getfeedback()
+                    #sock.sendall(('quit\n').encode())
+                    #quit = await getfeedback()
 
 
             except websockets.exeptions.ConnectionClosed:
