@@ -38,7 +38,7 @@ async def producer():
                     case "7":
                         msg = {'msg': 'dashboardCMD', 'data': "quit"}
                     case "8":
-                        msg = {'msg': 'dashboardCMD', 'data': "None"}
+                        msg = {'msg': 'Casual Test', 'data': "None"}
                     case "9":
                         msg = {'msg': 'dashboardCMD', 'data': "None"}
                     case "10":
@@ -47,7 +47,7 @@ async def producer():
                         msg = {'msg': 'dashboardCMD', 'data': "None"}
                     
                 if last_msg != msg:
-                    print(msg)
+                    print(json.dumps(msg))
                     await websocket.send(json.dumps(msg))
                     last_msg = msg
                 #msg = {'msg': 'ArmPosition', 'data' : init_q}

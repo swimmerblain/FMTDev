@@ -148,9 +148,40 @@ wss.on('connection', (ws, req) => {
                 break;
             case "dashboardData":
                 console.log(`message id=${ws.connectionID} data=${message}`);
-                
+                outgoing = {
+                    msg: message['msg'],
+                    data: message['data']
+
+                }
+                if (live){
+                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                }
 
                 break;
+            case "dashboardCMD":
+                console.log(`message id=${ws.connectionID} data=${message}`);
+                outgoing = {
+                    msg: message['msg'],
+                    data: message['data']
+                }
+                if (live){
+                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                }
+    
+                break;
+            case "Casual Test":
+                console.log(`message id=${ws.connectionID} data=${message}`);
+                outgoing = {
+                    msg: message['msg'],
+                    data: "message recieved"
+                }
+                if (live){
+                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                }
+        
+                break;
+                
+            
             
             default:
                 sendToAll(wss.clients, ws, message);

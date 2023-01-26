@@ -12,7 +12,11 @@ port = 29999
 timeout = 5
 connected = False
 
-server = 'ws://localhost:4007'
+#server = 'ws://localhost:4007'
+
+#server = 'ws://vast-flies-stay-162-191-47-209.loca.lt'
+server = 'ws://10.5.100.136:4007'
+
 
 unlock = "Unknown"
 quit = "unknown"
@@ -135,6 +139,7 @@ async def producer():
                 data['Unlocking Protective'] = unlock
                 data['Quit'] = quit
                 msg['data'] = data
+                print(msg)
                 await websocket.send(json.dumps(msg))
                 await asyncio.sleep(1)
             except websockets.exeptions.ConnectionClosed:
@@ -149,33 +154,37 @@ async def consumer():
             try:
                 message = await websocket.recv()
                 msgData = json.loads(message)
-                print(msgData['data'])
-                if msgData['msg'] == 'dashboardCMD':
-                    
-                    if msgData['data'] == "shutdown":
-                        sock.sendall(('shudown\n').encode())
-                    elif str(msgData['data']) == "power off":
-                        sock.sendall(('power off\n').encode())
-                        await getfeedback()
-                    elif str(msgData['data']) == "power on":
-                        print("powered on")
-                        sock.sendall(('power on\n').encode())
-                        await getfeedback()
-                    elif msgData['data'] == "brake release":
-                        sock.sendall(('brake release\n').encode())
-                        await getfeedback()
-                    elif msgData['data'] == "unlock protective stop":
-                        sock.sendall(('unlock protective stop\n').encode())
-                        unlock = await getfeedback()
-                    elif msgData['data'] == "restart safety":
-                        sock.sendall(('restart safety\n').encode())
-                        await getfeedback()
-                    elif msgData['data'] == "quit":
-                        sock.sendall(('quit\n').encode())
-                        quit = await getfeedback()
-                    else:
-                        print("unknown command ", str(msgData['data']))
-                        
+                #print("data")
+                #print(msgData)
+
+                if 'msg' in msgData:
+                    if msgData['msg'] == 'dashboardCMD':
+                        print(msgData['data'])
+
+                        if msgData['data'] == "shutdown":
+                            sock.sendall(('shudown\n').encode())
+                        elif str(msgData['data']) == "power off":
+                            sock.sendall(('power off\n').encode())
+                            await getfeedback()
+                        elif str(msgData['data']) == "power on":
+                            print("powered on")
+                            sock.sendall(('power on\n').encode())
+                            await getfeedback()
+                        elif msgData['data'] == "brake release":
+                            sock.sendall(('brake release\n').encode())
+                            await getfeedback()
+                        elif msgData['data'] == "unlock protective stop":
+                            sock.sendall(('unlock protective stop\n').encode())
+                            unlock = await getfeedback()
+                        elif msgData['data'] == "restart safety":
+                            sock.sendall(('restart safety\n').encode())
+                            await getfeedback()
+                        elif msgData['data'] == "quit":
+                            sock.sendall(('quit\n').encode())
+                            quit = await getfeedback()
+                        else:
+                            print("unknown command ", str(msgData['data']))
+
 
                     #print("True")
                     #Unlocking Protective
