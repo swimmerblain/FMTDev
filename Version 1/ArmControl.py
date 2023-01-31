@@ -20,7 +20,8 @@ pos10 = [0.0, -90, 0.0, -180.0, -90.0, 0.0]
 
 #logger = logging.getLogger(__name__)
 
-server = 'ws://localhost:4007'
+#server = 'ws://localhost:4007'
+server = 'ws://192.168.89.128:4007'
 #msg1 = {'msg': 'setLiveSession', 'data': {'live': 'true'}}
 
 async def toDeg(values):

@@ -12,10 +12,10 @@ port = 29999
 timeout = 5
 connected = False
 
-#server = 'ws://localhost:4007'
+server = 'ws://localhost:4007'
 
 #server = 'ws://vast-flies-stay-162-191-47-209.loca.lt'
-server = 'ws://10.5.100.136:4007'
+#server = 'ws://10.5.100.136:4007'
 
 
 unlock = "Unknown"
@@ -139,7 +139,7 @@ async def producer():
                 data['Unlocking Protective'] = unlock
                 data['Quit'] = quit
                 msg['data'] = data
-                print(msg)
+                #print(msg)
                 await websocket.send(json.dumps(msg))
                 await asyncio.sleep(1)
             except websockets.exeptions.ConnectionClosed:
@@ -154,10 +154,14 @@ async def consumer():
             try:
                 message = await websocket.recv()
                 msgData = json.loads(message)
+                msgdata2 = json.dumps(message)
                 #print("data")
+                #print(message)
                 #print(msgData)
-
+                #print(msgdata2)
+                    
                 if 'msg' in msgData:
+                    print("msg recieved")
                     if msgData['msg'] == 'dashboardCMD':
                         print(msgData['data'])
 

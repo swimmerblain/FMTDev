@@ -161,11 +161,11 @@ wss.on('connection', (ws, req) => {
             case "dashboardCMD":
                 console.log(`message id=${ws.connectionID} data=${message}`);
                 outgoing = {
-                    msg: "dashboardCMD",
-                    data: incoming.data
+                    msg: message['msg'],
+                    data: message['data']
                 }
                 //if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
+                    sendToAll(wss.clients, ws, JSON.stringify(message))
                 //}
     
                 break;
