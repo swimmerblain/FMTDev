@@ -83,80 +83,34 @@ wss.on('connection', (ws, req) => {
                     sendToAll(wss.clients, ws, JSON.stringify(outgoing)); 
                 }
                 break;
-            case "currentArmPosition":
+            //Includes arm and hand position and state
+            case "robotFDBK":
                 //console.log(live)
                 //console.log(incoming.data)
                 //console.log("Current Position:")
                 outgoing = {
-                    msg: "curArmPosition",
+                    msg: incoming.msg,
                     data: incoming.data
                 }
-		//if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing));
-                //}
+                console.log(outgoing)
+
+                sendToAll(wss.clients, ws, JSON.stringify(outgoing));
+
                 break;
-            case "ArmPosition":
-                //console.log("new Position:")
-                console.log(incoming.data)
-                outgoing = {
-                    msg: "newArmPosition",
-                    data: incoming.data
-                }
-                if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                }
-                break;
-            case "handPos":
-                //console.log(incoming.data)
-                outgoing = {
-                    msg: "newHandPos",
-                    data: incoming.data
-                }
-                if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                }
-                break;
-            case "currentHandPos":
-                //console.log(incoming.data)
-                outgoing = {
-                    msg: "curHandPos",
-                    data: incoming.data
-                }
-                if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                }
-                break;
-			case "armPushButton":
-                //console.log(incoming.data)
-                outgoing = {
-                    msg: "armPushButton",
-                    data: incoming.data
-                }
-                if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                }
-                break;
-            case "lightColor":
-                
-                outgoing = {
-                    msg: "lightColor",
-                    data: incoming.data
-                }
-                if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                }
-                break;
+
+
+
             case "dashboardData":
-                console.log(`message id=${ws.connectionID} data=${message}`);
+                //console.log(`message id=${ws.connectionID} data=${message}`);
                 outgoing = {
                     msg: incoming.msg,
                     data: incoming.data
 
                 }
-                console.log(outgoing)
-                //if (live){
-                    sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                //}
+                //console.log(outgoing)
+
+                sendToAll(wss.clients, ws, (outgoing))
+
 
                 break;
             case "dashboardCMD":
@@ -165,13 +119,13 @@ wss.on('connection', (ws, req) => {
                     msg: "dashboardCMD",
                     data: incoming.data
                 }
-                //if (live){
+
                     sendToAll(wss.clients, ws, JSON.stringify(outgoing))
-                //}
+
     
                 break;
             case "Casual Test":
-		console.log(`correct message`);
+		        console.log(`correct message`);
                 console.log(`message id=${ws.connectionID} data=${message}`);
                 outgoing = {
                     msg: message['msg'],
@@ -186,7 +140,7 @@ wss.on('connection', (ws, req) => {
             
             
             default:
-		console.log(JSON.parse(message));
+		        console.log(JSON.parse(message));
                 sendToAll(wss.clients, ws, message);
         }
     });
