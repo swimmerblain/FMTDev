@@ -1,0 +1,38 @@
+Feedback from Arduino
+
+{"msg" : "Auxilary Feedback",
+"Data" : [
+"Fan Power" : "On",
+"NS Power" : "On",
+"Rover Power": "On",
+"Hand Power" : "On",
+"Battery Voltage" : 28.56,
+"External Temp" : 77.53,
+"External Humidity" : 34.32,
+"Front distance" : 3432,
+"Prox FL" : "Too Close",
+"Prox FR" : "Too Close",
+"Prox RL" : "Too Close",
+"Prox RR" : "Too Close",
+"internal Front Temp" : 34.23,
+"internal Battery Temp" : 32,32,
+"Internal UR Temp" : 32.32,
+"Internal Podcom Temp" : 32.32,
+"RLY 1 State" : "On",
+"RLY 2 State" : "On",
+"RLY 3 State" : "On",
+"RLY 4 State" : "On",
+"RLY 5 State" : "On",
+"RLY 6 State" : "On",
+"RLY 7 State" : "On",
+"RLY 8 State" : "On",
+"RLY 9 State" : "On",
+"RLY 10 State" : "On",
+"RLY 11 State" : "On",
+"RLY 12 State" : "On",
+"RLY 13 State" : "On",
+"RLY 14 State" : "On",
+"RLY 15 State" : "On",
+"RLY 16 State" : "On"
+]}
+
